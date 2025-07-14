@@ -4,7 +4,6 @@ import speech_recognition as sr
 import cv2
 import threading
 from PIL import Image, ImageTk
-import os
 
 def speak_text(text):
     engine = pyttsx3.init()
@@ -29,10 +28,9 @@ def detect_speech_with_opencv(output_widget):
 def recognize_speech(output_widget):
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
-        recognizer.adjust_for_ambient_noise(source, duration=1)  # Adjusts for background noise
         output_label.config(text="Listening...", font=("Arial", 12, "bold"), fg="red")
         try:
-            audio = recognizer.listen(source, timeout=5)  # Timeout added
+            audio = recognizer.listen(source)
             text = recognizer.recognize_google(audio)
             output_label.config(text=f"Blind User Said: {text}", fg="green")
             output_widget.insert(tk.END, f"Blind: {text}\n")
@@ -40,27 +38,12 @@ def recognize_speech(output_widget):
             output_label.config(text="Could not understand audio", fg="orange")
         except sr.RequestError:
             output_label.config(text="Could not request results", fg="red")
-        except sr.WaitTimeoutError:
-            output_label.config(text="Listening timed out", fg="red")
 
 def send_text():
     text = text_input.get()
     text_output.insert(tk.END, f"Deaf/Mute: {text}\n")
     speak_text(text)
     text_input.delete(0, tk.END)
-    display_sign_language(text, sign_output)
-
-def display_sign_language(text, output_widget):
-    output_widget.delete("1.0", tk.END)
-    for letter in text.upper():
-        image_path = f"sign_language/{letter}.png"
-        if os.path.exists(image_path):
-            img = Image.open(image_path)
-            img = img.resize((50, 50), Image.ANTIALIAS)
-            img = ImageTk.PhotoImage(img)
-            label = tk.Label(output_widget, image=img)
-            label.image = img  # Keep reference
-            label.pack(side=tk.LEFT)
 
 def open_conversation():
     conversation_window = tk.Toplevel(root)
@@ -98,14 +81,13 @@ def send_conversation_text(entry_widget, output_widget):
     output_widget.insert(tk.END, f"Deaf/Mute: {text}\n")
     speak_text(text)
     entry_widget.delete(0, tk.END)
-    display_sign_language(text, sign_output)
 
 def reset_conversation(output_widget):
     output_widget.delete("1.0", tk.END)
 
 root = tk.Tk()
 root.title("Communication System")
-root.geometry("420x600")
+root.geometry("420x500")
 root.configure(bg="#B3E5FC")
 
 welcome_message = "Welcome to the communication system. Deaf or mute users can type, and blind users can speak.\nBeing different doesn’t mean being disconnected—welcome to a world where everyone is heard!"
@@ -114,19 +96,20 @@ tk.Label(root, text=welcome_message, bg="#B3E5FC", fg="blue", wraplength=400, fo
 
 image_path = "picture2.jpeg"
 img = Image.open(image_path)
-img = img.resize((400, 200), Image.LANCZOS)
+img = img.resize((400, 200), Image.Resampling.LANCZOS)
 img = ImageTk.PhotoImage(img)
 tk.Label(root, image=img, bg="#B3E5FC").pack()
 root.image = img  # Keep a reference to avoid garbage collection
 
 root.after(1000, lambda: speak_text(welcome_message))
 
-sign_output = tk.Frame(root, bg="#B3E5FC")
-sign_output.pack()
-
 tk.Button(root, text="Start Conversation", bg="#7E57C2", fg="white", font=("Arial", 12, "bold"), command=open_conversation).pack(pady=20)
 
 root.mainloop()
+
+
+
+
 
 
 
