@@ -48,6 +48,7 @@ pip install pyttsx3,SpeechRecognition, opencv-python, pillow
 
 ### Step 2: Run the app
 python Kalpana_Hackathon_final.py
+
 ---
 
 ## 🚀 Future Enhancements
