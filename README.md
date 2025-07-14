@@ -39,13 +39,14 @@ This desktop-based Python application provides a GUI where:
 ## 📸 Screenshot
 <img width="411" height="474" alt="image" src="https://github.com/user-attachments/assets/2e519d36-af54-4245-868f-9eb66dc11f13" />
 <img width="348" height="486" alt="image" src="https://github.com/user-attachments/assets/d176eacc-6fec-49f6-b0cd-d60f67a8f5bc" />
+
 ---
 ## ▶️ How to Run
 
 ### Step 1:Install dependencies:
 pip install pyttsx3,SpeechRecognition, opencv-python, pillow
 
-Step 2: Run the app
+### Step 2: Run the app
 python Kalpana_Hackathon_final.py
 ---
 
